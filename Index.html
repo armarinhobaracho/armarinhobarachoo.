@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Armarinho Baracho | Seu Ateliê de Criatividade</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts (Inter e Playfair Display) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <!-- FontAwesome para Ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#fdf8f6',
+                            100: '#f7e6e0',
+                            200: '#edd0c5',
+                            300: '#e0b2a1',
+                            400: '#d18d78',
+                            500: '#c26d57',
+                            600: '#a8503d',
+                            700: '#8c3d2e',
+                            800: '#733328',
+                            900: '#5e2d24',
+                        },
+                        craft: {
+                            cream: '#FAF7F2',
+                            sage: '#E8EFE9',
+                            rose: '#FCEFEF',
+                            text: '#332C2B'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #FAF7F2;
+            color: #332C2B;
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF7F2;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #e0b2a1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #c26d57;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased flex flex-col min-h-screen">
+
+    <!-- Top Bar -->
+    <div class="bg-brand-700 text-white text-xs py-2 px-4 text-center tracking-wider font-light">
+        <i class="fa-solid fa-heart text-red-300 mr-1"></i> BEM-VINDO AO ARMARINHO BARACHO • ENTREGAMOS PARA TODO O BRASIL!
+    </div>
+
+    <!-- Header / Navbar -->
+    <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-brand-100 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center gap-3 cursor-pointer" onclick="filterCategory('todos')">
+                    <!-- SVG Logo Armarinho Baracho -->
+                    <div class="w-12 h-12 rounded-full bg-brand-100 flex items-center justify-center p-2 border border-brand-300 shadow-inner">
+                        <svg viewBox="0 0 100 100" class="w-full h-full text-brand-600 fill-current">
+                            <!-- Yarn Ball Graphic -->
+                            <path d="M50,15 A35,35 0 1,0 85,50 A35,35 0 0,0 50,15 Z" fill="none" stroke="currentColor" stroke-width="6"/>
+                            <path d="M25,35 C40,20 60,30 75,25" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+                            <path d="M20,50 C35,45 65,55 80,45" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+                            <path d="M25,65 C45,75 55,60 75,70" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+                            <!-- Knitting Needle -->
+                            <line x1="15" y1="85" x2="85" y2="15" stroke="#733328" stroke-width="5" stroke-linecap="round"/>
+                            <circle cx="15" cy="85" r="5" fill="#733328"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <span class="font-serif text-2xl font-bold tracking-tight text-brand-800 block leading-none">Armarinho Baracho</span>
+                        <span class="text-xs tracking-widest text-brand-500 uppercase font-medium">Costura & Aviamentos</span>
+                    </div>
+                </div>
+
+                <!-- Campo de Pesquisa (Desktop) -->
+                <div class="hidden md:flex flex-1 max-w-md mx-8">
+                    <div class="relative w-full">
+                        <input type="text" id="searchInput" oninput="handleSearch()" placeholder="O que você precisa para seu projeto hoje?" 
+                            class="w-full pl-10 pr-4 py-2 text-sm bg-craft-cream border border-brand-200 rounded-full focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition">
+                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-brand-400">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ações do Usuário -->
+                <div class="flex items-center gap-4">
+                    <!-- Botão Carrinho -->
+                    <button onclick="toggleCartModal()" class="relative p-2.5 text-brand-700 hover:text-brand-900 bg-brand-50 hover:bg-brand-100 rounded-full transition shadow-sm">
+                        <i class="fa-solid fa-basket-shopping text-xl"></i>
+                        <span id="cartCount" class="absolute -top-1 -right-1 bg-brand-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center border-2 border-white">0</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Pesquisa Mobile -->
+            <div class="pb-3 md:hidden">
+                <div class="relative w-full">
+                    <input type="text" id="searchInputMobile" oninput="handleSearchMobile()" placeholder="Buscar produtos..." 
+                        class="w-full pl-10 pr-4 py-2 text-sm bg-craft-cream border border-brand-200 rounded-full focus:outline-none focus:border-brand-500">
+                    <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-brand-400">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Banner Hero -->
+    <section class="bg-gradient-to-r from-brand-100 via-craft-rose to-craft-cream py-12 md:py-16 border-b border-brand-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <div class="text-center md:text-left">
+                    <span class="inline-block px-3 py-1 bg-brand-200 text-brand-800 rounded-full text-xs font-semibold tracking-wider uppercase mb-3">Qualidade e Tradição</span>
+                    <h1 class="font-serif text-4xl sm:text-5xl font-bold text-brand-900 leading-tight mb-4">Dê vida às suas ideias com nossos materiais.</h1>
+                    <p class="text-brand-700 text-base sm:text-lg mb-6 max-w-lg">Encontre a maior variedade de fios, linhas, botões, fitas e acessórios para crochê, tricô e costura.</p>
+                    <a href="#catalogo" class="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-medium px-6 py-3 rounded-full shadow-md hover:shadow-lg transition duration-300 transform hover:-translate-y-0.5">
+                        Explorar Catálogo <i class="fa-solid fa-arrow-right text-sm"></i>
+                    </a>
+                </div>
+                <div class="hidden md:flex justify-center">
+                    <div class="relative w-80 h-80 rounded-2xl bg-white p-4 shadow-xl border border-brand-100 rotate-2 hover:rotate-0 transition duration-500">
+                        <img src="https://images.unsplash.com/photo-1584992236310-6edddc08acff?auto=format&fit=crop&w=600&q=80" alt="Materiais de Costura" class="w-full h-full object-cover rounded-lg">
+                        <div class="absolute -bottom-4 -left-4 bg-brand-600 text-white p-3 rounded-lg shadow-lg flex items-center gap-3">
+                            <i class="fa-solid fa-scissors text-2xl"></i>
+                            <div>
+                                <p class="text-xs uppercase font-light">Tudo para seu</p>
+                                <p class="font-bold text-sm">Artesanato & Costura</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filtros de Categorias -->
+    <section id="catalogo" class="py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+        <h2 class="font-serif text-2xl sm:text-3xl font-bold text-brand-900 text-center mb-6">Nossas Categorias</h2>
+        
+        <div class="flex flex-wrap items-center justify-center gap-2 md:gap-3 mb-8" id="categoryButtons">
+            <button onclick="filterCategory('todos')" class="cat-btn active-cat bg-brand-600 text-white px-5 py-2 rounded-full text-sm font-medium transition shadow-sm" data-cat="todos">
+                Todos os Produtos
+            </button>
+            <button onclick="filterCategory('linhas')" class="cat-btn bg-white text-brand-800 border border-brand-200 hover:bg-brand-50 px-5 py-2 rounded-full text-sm font-medium transition shadow-sm" data-cat="linhas">
+                <i class="fa-solid fa-spool text-brand-500 mr-1.5"></i> Linhas & Fios
+            </button>
+            <button onclick="filterCategory('botoes')" class="cat-btn bg-white text-brand-800 border border-brand-200 hover:bg-brand-50 px-5 py-2 rounded-full text-sm font-medium transition shadow-sm" data-cat="botoes">
+                <i class="fa-solid fa-circle text-brand-500 mr-1.5"></i> Botões, Zíperes & Alfinetes
+            </button>
+            <button onclick="filterCategory('fitas')" class="cat-btn bg-white text-brand-800 border border-brand-200 hover:bg-brand-50 px-5 py-2 rounded-full text-sm font-medium transition shadow-sm" data-cat="fitas">
+                <i class="fa-solid fa-ribbon text-brand-500 mr-1.5"></i> Elásticos, Fitas & Rendas
+            </button>
+            <button onclick="filterCategory('trico')" class="cat-btn bg-white text-brand-800 border border-brand-200 hover:bg-brand-50 px-5 py-2 rounded-full text-sm font-medium transition shadow-sm" data-cat="trico">
+                <i class="fa-solid fa-gear text-brand-500 mr-1.5"></i> Lãs & Amigurumi
+            </button>
+        </div>
+
+        <!-- Grade de Produtos -->
+        <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <!-- Os produtos serão injetados via JS -->
+        </div>
+
+        <!-- Mensagem de Produto Não Encontrado -->
+        <div id="noResults" class="hidden text-center py-12">
+            <i class="fa-solid fa-box-open text-4xl text-brand-300 mb-3"></i>
+            <p class="text-brand-700 font-medium">Nenhum produto foi encontrado para sua busca.</p>
+        </div>
+    </section>
+
+    <!-- Modal do Carrinho -->
+    <div id="cartModal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex justify-end hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-white w-full max-w-md h-full shadow-2xl flex flex-col justify-between transform translate-x-full transition-transform duration-300" id="cartContent">
+            <!-- Header do Carrinho -->
+            <div class="p-4 border-b border-gray-100 flex items-center justify-between bg-brand-50">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-basket-shopping text-brand-600 text-xl"></i>
+                    <h3 class="font-serif text-lg font-bold text-brand-900">Seu Carrinho</h3>
+                </div>
+                <button onclick="toggleCartModal()" class="text-gray-400 hover:text-gray-600 p-2">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+
+            <!-- Lista de Itens -->
+            <div id="cartItemsContainer" class="p-4 flex-1 overflow-y-auto divide-y divide-gray-100">
+                <!-- Itens do carrinho aparecem aqui -->
+            </div>
+
+            <!-- Footer do Carrinho / Fechamento -->
+            <div class="p-4 border-t border-gray-100 bg-gray-50">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-gray-600 font-medium">Total Estimado:</span>
+                    <span id="cartTotal" class="text-2xl font-bold text-brand-800">R$ 0,00</span>
+                </div>
+                <button onclick="checkoutWhatsApp()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 px-4 rounded-xl font-semibold flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition">
+                    <i class="fa-brands fa-whatsapp text-xl"></i> Finalizar Pedido no WhatsApp
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Banner Garantias / Diferenciais -->
+    <section class="bg-brand-50 my-12 py-10 border-y border-brand-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                <div class="p-4 rounded-xl bg-white shadow-sm border border-brand-100">
+                    <div class="w-12 h-12 bg-brand-100 text-brand-600 rounded-full flex items-center justify-center mx-auto mb-3 text-xl">
+                        <i class="fa-solid fa-truck-fast"></i>
+                    </div>
+                    <h4 class="font-bold text-brand-900 mb-1">Envio Rápido</h4>
+                    <p class="text-xs text-brand-600">Entregamos com agilidade para todo o Brasil.</p>
+                </div>
+                <div class="p-4 rounded-xl bg-white shadow-sm border border-brand-100">
+                    <div class="w-12 h-12 bg-brand-100 text-brand-600 rounded-full flex items-center justify-center mx-auto mb-3 text-xl">
+                        <i class="fa-solid fa-shield-heart"></i>
+                    </div>
+                    <h4 class="font-bold text-brand-900 mb-1">Qualidade Garantida</h4>
+                    <p class="text-xs text-brand-600">As melhores marcas de fios e aviamentos do mercado.</p>
+                </div>
+                <div class="p-4 rounded-xl bg-white shadow-sm border border-brand-100">
+                    <div class="w-12 h-12 bg-brand-100 text-brand-600 rounded-full flex items-center justify-center mx-auto mb-3 text-xl">
+                        <i class="fa-solid fa-headset"></i>
+                    </div>
+                    <h4 class="font-bold text-brand-900 mb-1">Atendimento Personalizado</h4>
+                    <p class="text-xs text-brand-600">Dúvidas? Fale conosco direto no WhatsApp.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Rodapé Completo -->
+    <footer class="bg-brand-900 text-brand-100 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                
+                <!-- Coluna 1: Sobre -->
+                <div class="md:col-span-2">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center p-2">
+                            <svg viewBox="0 0 100 100" class="w-full h-full text-brand-200 fill-current">
+                                <path d="M50,15 A35,35 0 1,0 85,50 A35,35 0 0,0 50,15 Z" fill="none" stroke="currentColor" stroke-width="6"/>
+                                <path d="M25,35 C40,20 60,30 75,25" fill="none" stroke="currentColor" stroke-width="4"/>
+                                <path d="M20,50 C35,45 65,55 80,45" fill="none" stroke="currentColor" stroke-width="4"/>
+                            </svg>
+                        </div>
+                        <span class="font-serif text-xl font-bold tracking-tight text-white">Armarinho Baracho</span>
+                    </div>
+                    <p class="text-xs leading-relaxed text-brand-200 max-w-sm mb-4">
+                        O Armarinho Baracho é o seu espaço completo de aviamentos, linhas, lãs e acessórios para artesãs e costureiras. Qualidade e carinho em cada detalhe.
+                    </p>
+                </div>
+
+                <!-- Coluna 2: Categorias -->
+                <div>
+                    <h5 class="text-white font-semibold mb-3 text-sm">Categorias</h5>
+                    <ul class="space-y-2 text-xs text-brand-200">
+                        <li><a href="#catalogo" onclick="filterCategory('linhas')" class="hover:text-white transition">Linhas & Fios Têxteis</a></li>
+                        <li><a href="#catalogo" onclick="filterCategory('botoes')" class="hover:text-white transition">Botões, Zíperes & Alfinetes</a></li>
+                        <li><a href="#catalogo" onclick="filterCategory('fitas')" class="hover:text-white transition">Elásticos, Fitas & Rendas</a></li>
+                        <li><a href="#catalogo" onclick="filterCategory('trico')" class="hover:text-white transition">Lãs, Barbantes & Amigurumi</a></li>
+                    </ul>
+                </div>
+
+                <!-- Coluna 3: Contato & Informações Legais -->
+                <div>
+                    <h5 class="text-white font-semibold mb-3 text-sm">Contato & Dados</h5>
+                    <ul class="space-y-2 text-xs text-brand-200">
+                        <li class="flex items-center gap-2">
+                            <i class="fa-solid fa-envelope text-brand-400"></i>
+                            <span>Armarinhobaracho@gmail.com</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i class="fa-solid fa-id-card text-brand-400"></i>
+                            <span>CNPJ: 70.022.213/0001-08</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i class="fa-solid fa-location-dot text-brand-400"></i>
+                            <span>Atendimento Online para todo o Brasil</span>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="border-t border-brand-800 pt-6 flex flex-col sm:flex-row justify-between items-center text-xs text-brand-300 gap-4">
+                <p>&copy; 2026 Armarinho Baracho. Todos os direitos reservados.</p>
+                <div class="flex gap-4 text-base">
+                    <a href="#" class="hover:text-white transition"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" class="hover:text-white transition"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="#" class="hover:text-white transition"><i class="fa-brands fa-whatsapp"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Lógica em JavaScript -->
+    <script>
+        // Dados dos produtos organizados por categoria
+        const products = [
+            // Categoria: Linhas e Fios Têxteis
+            {
+                id: 1,
+                name: "Linha de Costura 100% Poliéster (Caixa com 10 carretéis)",
+                category: "linhas",
+                price: 18.90,
+                image: "https://images.unsplash.com/photo-1605518216938-7c31b7b14ad0?auto=format&fit=crop&w=500&q=80",
+                description: "Kit com cores sortidas, alta resistência para máquinas de costura e costura à mão."
+            },
+            {
+                id: 2,
+                name: "Fio Têxtil Premium 140m",
+                category: "linhas",
+                price: 24.50,
+                image: "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=500&q=80",
+                description: "Ideal para crochê de estrutura, bolsas, cestos organizadores e decoração."
+            },
+            {
+                id: 3,
+                name: "Linha Meada para Bordado (Kit com 12)",
+                category: "linhas",
+                price: 22.00,
+                image: "https://images.unsplash.com/photo-1528458909336-e7a0adfed0a5?auto=format&fit=crop&w=500&q=80",
+                description: "Meadas de algodão mercerizado com brilho e textura perfeitos para ponto cruz."
+            },
+
+            // Categoria: Botões, Zíperes e Alfinetes
+            {
+                id: 4,
+                name: "Kit Botões Decorativos de Madeira (50 un)",
+                category: "botoes",
+                price: 15.90,
+                image: "https://images.unsplash.com/photo-1616401784845-180882ba9ba8?auto=format&fit=crop&w=500&q=80",
+                description: "Botões rústicos perfeitos para peças artesanais, roupas e amigurumi."
+            },
+            {
+                id: 5,
+                name: "Zíper Invisível 15cm (Kit com 5 unidades)",
+                category: "botoes",
+                price: 12.50,
+                image: "https://images.unsplash.com/photo-1597484661643-2f5fef640dd1?auto=format&fit=crop&w=500&q=80",
+                description: "Zíperes de alta qualidade para vestidos, saias e confecção fina."
+            },
+            {
+                id: 6,
+                name: "Alfinetes de Cabeça Colorida com Disco",
+                category: "botoes",
+                price: 9.90,
+                image: "https://images.unsplash.com/photo-1584992236310-6edddc08acff?auto=format&fit=crop&w=500&q=80",
+                description: "Disco com 40 alfinetes de aço niquelado, ideais para marcação de moldes."
+            },
+
+            // Categoria: Elásticos, Fitas, Rendas e Passamanarias
+            {
+                id: 7,
+                name: "Fita de Cetim 22mm (Rolo com 10m)",
+                category: "fitas",
+                price: 11.00,
+                image: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=500&q=80",
+                description: "Fita de cetim acetinada para acabamentos, laços e embalagens de presente."
+            },
+            {
+                id: 8,
+                name: "Renda de Algodão Trabalhada (Peça de 5m)",
+                category: "fitas",
+                price: 19.90,
+                image: "https://images.unsplash.com/photo-1607344645866-009c320c5ab8?auto=format&fit=crop&w=500&q=80",
+                description: "Renda delicada tom cru para acabamento em panos de prato e roupas."
+            },
+            {
+                id: 9,
+                name: "Elástico Chato Reforçado 20mm (10 metros)",
+                category: "fitas",
+                price: 14.20,
+                image: "https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=500&q=80",
+                description: "Elástico macio e resistente para bermudas, saias e máscaras."
+            },
+
+            // Categoria: Lãs, Barbantes, Amigurumi e Tricô
+            {
+                id: 10,
+                name: "Novelo de Lã Macia 100g",
+                category: "trico",
+                price: 16.80,
+                image: "https://images.unsplash.com/photo-1615486511484-92e172cc4fe0?auto=format&fit=crop&w=500&q=80",
+                description: "Lã 100% acrílica extra macia para cachecóis, casacos e mantas quentinhas."
+            },
+            {
+                id: 11,
+                name: "Kit Fios para Amigurumi 100% Algodão",
+                category: "trico",
+                price: 34.90,
+                image: "https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?auto=format&fit=crop&w=500&q=80",
+                description: "Fios macios e resistentes de algodão mercerizado, ideais para bichinhos em crochê."
+            },
+            {
+                id: 12,
+                name: "Barbante Ecológico Nº 6 (400g)",
+                category: "trico",
+                price: 21.00,
+                image: "https://images.unsplash.com/photo-1508873696983-2df515122519?auto=format&fit=crop&w=500&q=80",
+                description: "Barbante de ótima espessura para tapetes, sousplat e itens de macramê."
+            }
+        ];
+
+        // Estado do Carrinho
+        let cart = [];
+        let currentCategory = 'todos';
+
+        // Inicializar Renderização
+        window.onload = () => {
+            renderProducts(products);
+        };
+
+        // Renderizar Produtos
+        function renderProducts(items) {
+            const grid = document.getElementById('productGrid');
+            const noResults = document.getElementById('noResults');
+
+            if (items.length === 0) {
+                grid.innerHTML = '';
+                noResults.classList.remove('hidden');
+                return;
+            }
+
+            noResults.classList.add('hidden');
+            grid.innerHTML = items.map(product => `
+                <div class="bg-white rounded-2xl border border-brand-100 overflow-hidden shadow-sm hover:shadow-md transition duration-300 flex flex-col justify-between group">
+                    <div>
+                        <div class="relative overflow-hidden h-48 bg-craft-cream">
+                            <img src="${product.image}" alt="${product.name}" 
+                                class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                                onerror="this.src='https://placehold.co/500x350/f7e6e0/8c3d2e?text=Armarinho+Baracho'">
+                            <span class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm text-brand-800 text-xs font-semibold px-2.5 py-1 rounded-full shadow-sm">
+                                ${getCategoryName(product.category)}
+                            </span>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-bold text-brand-900 text-base mb-1 line-clamp-2">${product.name}</h3>
+                            <p class="text-xs text-brand-600 mb-3 line-clamp-2">${product.description}</p>
+                        </div>
+                    </div>
+                    <div class="p-4 pt-0 flex items-center justify-between border-t border-gray-50 mt-auto">
+                        <div>
+                            <span class="text-xs text-gray-400 block">Preço</span>
+                            <span class="text-lg font-bold text-brand-800">R$ ${product.price.toFixed(2).replace('.', ',')}</span>
+                        </div>
+                        <button onclick="addToCart(${product.id})" class="bg-brand-600 hover:bg-brand-700 text-white p-2.5 rounded-xl text-sm font-medium transition flex items-center gap-1.5 shadow-sm">
+                            <i class="fa-solid fa-cart-plus"></i> Adicionar
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function getCategoryName(cat) {
+            switch(cat) {
+                case 'linhas': return 'Linhas & Fios';
+                case 'botoes': return 'Botões & Zíperes';
+                case 'fitas': return 'Fitas & Rendas';
+                case 'trico': return 'Lãs & Tricô';
+                default: return 'Aviamento';
+            }
+        }
+
+        // Filtrar por Categoria
+        function filterCategory(cat) {
+            currentCategory = cat;
+            
+            // Atualizar classes dos botões
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                if (btn.dataset.cat === cat) {
+                    btn.className = "cat-btn active-cat bg-brand-600 text-white px-5 py-2 rounded-full text-sm font-medium transition shadow-sm";
+                } else {
+                    btn.className = "cat-btn bg-white text-brand-800 border border-brand-200 hover:bg-brand-50 px-5 py-2 rounded-full text-sm font-medium transition shadow-sm";
+                }
+            });
+
+            // Limpar campo de busca
+            document.getElementById('searchInput').value = '';
+            document.getElementById('searchInputMobile').value = '';
+
+            if (cat === 'todos') {
+                renderProducts(products);
+            } else {
+                const filtered = products.filter(p => p.category === cat);
+                renderProducts(filtered);
+            }
+        }
+
+        // Buscar Produtos
+        function handleSearch() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            filterProductsByQuery(query);
+        }
+
+        function handleSearchMobile() {
+            const query = document.getElementById('searchInputMobile').value.toLowerCase();
+            filterProductsByQuery(query);
+        }
+
+        function filterProductsByQuery(query) {
+            const filtered = products.filter(p => {
+                const matchesCategory = currentCategory === 'todos' || p.category === currentCategory;
+                const matchesQuery = p.name.toLowerCase().includes(query) || p.description.toLowerCase().includes(query);
+                return matchesCategory && matchesQuery;
+            });
+            renderProducts(filtered);
+        }
+
+        // Gerenciamento do Carrinho
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            const itemInCart = cart.find(item => item.id === productId);
+
+            if (itemInCart) {
+                itemInCart.quantity += 1;
+            } else {
+                cart.push({ ...product, quantity: 1 });
+            }
+
+            updateCartUI();
+            toggleCartModal(true); // Abre o carrinho
+        }
+
+        function updateQuantity(productId, delta) {
+            const item = cart.find(i => i.id === productId);
+            if (item) {
+                item.quantity += delta;
+                if (item.quantity <= 0) {
+                    cart = cart.filter(i => i.id !== productId);
+                }
+            }
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const cartItemsContainer = document.getElementById('cartItemsContainer');
+            const cartCount = document.getElementById('cartCount');
+            const cartTotal = document.getElementById('cartTotal');
+
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+            cartCount.innerText = totalItems;
+            cartTotal.innerText = `R$ ${totalPrice.toFixed(2).replace('.', ',')}`;
+
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = `
+                    <div class="text-center py-12 text-gray-400">
+                        <i class="fa-solid fa-basket-shopping text-4xl mb-3"></i>
+                        <p class="text-sm">Seu carrinho está vazio.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            cartItemsContainer.innerHTML = cart.map(item => `
+                <div class="py-3 flex items-center gap-3">
+                    <img src="${item.image}" class="w-14 h-14 object-cover rounded-lg bg-gray-100 flex-shrink-0" onerror="this.src='https://placehold.co/100x100/f7e6e0/8c3d2e?text=Baracho'">
+                    <div class="flex-1 min-w-0">
+                        <h4 class="text-xs font-semibold text-brand-900 truncate">${item.name}</h4>
+                        <span class="text-xs text-brand-600 font-bold block mt-0.5">R$ ${(item.price * item.quantity).toFixed(2).replace('.', ',')}</span>
+                    </div>
+                    <div class="flex items-center border border-gray-200 rounded-lg overflow-hidden">
+                        <button onclick="updateQuantity(${item.id}, -1)" class="px-2 py-1 text-xs bg-gray-50 hover:bg-gray-100 text-gray-600">-</button>
+                        <span class="px-2 text-xs font-semibold text-gray-700">${item.quantity}</span>
+                        <button onclick="updateQuantity(${item.id}, 1)" class="px-2 py-1 text-xs bg-gray-50 hover:bg-gray-100 text-gray-600">+</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Modal Carrinho
+        function toggleCartModal(forceOpen = false) {
+            const modal = document.getElementById('cartModal');
+            const content = document.getElementById('cartContent');
+
+            if (forceOpen || modal.classList.contains('hidden')) {
+                modal.classList.remove('hidden');
+                setTimeout(() => {
+                    modal.classList.remove('opacity-0');
+                    content.classList.remove('translate-x-full');
+                }, 10);
+            } else {
+                modal.classList.add('opacity-0');
+                content.classList.add('translate-x-full');
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                }, 300);
+            }
+        }
+
+        // Finalizar Pedido via WhatsApp
+        function checkoutWhatsApp() {
+            if (cart.length === 0) {
+                alert('Seu carrinho está vazio!');
+                return;
+            }
+
+            let message = "Olá Armarinho Baracho! Gostaria de fazer o seguinte pedido:\n\n";
+            let total = 0;
+
+            cart.forEach(item => {
+                const subtotal = item.price * item.quantity;
+                total += subtotal;
+                message += `• ${item.quantity}x ${item.name} - R$ ${subtotal.toFixed(2).replace('.', ',')}\n`;
+            });
+
+            message += `\n*Total estimado:* R$ ${total.toFixed(2).replace('.', ',')}`;
+            message += "\n\nAguardo as instruções para pagamento e frete. Obrigado!";
+
+            const encodedMessage = encodeURIComponent(message);
+            // Substitua com o número oficial do WhatsApp se necessário
+            const phone = "5511999999999"; 
+            window.open(`https://wa.me/${phone}?text=${encodedMessage}`, '_blank');
+        }
+    </script>
+</body>
+</html>
